@@ -14,23 +14,8 @@ spec:
     volumeMounts:
     - name: html
       mountPath: /usr/share/nginx/
-  - name: ctr-sync
-    image: k8s.gcr.io/git-sync:v3.1.6
-    volumeMounts:
-    - name: html
-      mountPath: /tmp/git
-    env:
-    - name: GIT_SYNC_REPO
-      value: https://github.com/lvacgit/ps-sidecar.git
-    - name: GIT_SYNC_BRANCH
-      value: master
-    - name: GIT_SYNC_DEPTH
-      value: "1"
-    - name: GIT_SYNC_DEST
-      value: "html"
-  volumes:
-  - name: html
-    emptyDir: {}
+    ports:
+      containerPort: 2345
 ---
 apiVersion: v1
 kind: Service
@@ -41,5 +26,5 @@ spec:
     app: sidecar
   type: NodePort
   ports:
-  - port: 8080
+  - port: 2345
     nodePort: 30001
